@@ -1,38 +1,38 @@
-const express = require('express')
-const app = express()
-const cors = require('cors')
-const mongoose = require('mongoose')
-require('dotenv').config()
-const PORT = 8000
-const TestModel = require('./models/schema')
+const express = require('express') //import express
+const app = express() //create express app
+const cors = require('cors') //import cors
+const mongoose = require('mongoose') //import mongoose
+require('dotenv').config() //import dotenv
+const PORT = 8000 //set port
+const TestModel = require('./models/schema') //import schema
 
 //connection async function
-const connectDB = async () => {
-    try {
-        await mongoose.connect(process.env.DB_STRING,
-            { useNewUrlParser: true })
-        console.log(`Connected to database: ${mongoose.connection.name}`)
-    } catch (err) {
-        console.log(`Failed to connect`, err)
+const connectDB = async () => { //connect to database
+    try { //try to connect
+        await mongoose.connect(process.env.DB_STRING,  //connect to database
+            { useNewUrlParser: true })  //set options
+        console.log(`Connected to database: ${mongoose.connection.name}`)   //log connection
+    } catch (err) { //if error
+        console.log(`Failed to connect`, err)   //log error
     }
 }
 
-connectDB()
+connectDB() //connect to database
 
 //Middleware
-app.set('view engine', 'ejs')
-app.use(express.static('public'))
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
-app.use(cors())
+app.set('view engine', 'ejs')    //set view engine
+app.use(express.static('public'))   //set static folder
+app.use(express.urlencoded({ extended: true })) //set extended to true
+app.use(express.json()) //set json
+app.use(cors()) //set cors
 
-app.get('/', async (request, response) => {
-    try {
-        const content = await TestModel.find()
-        console.log(content);
-        response.render('index.ejs',{contentKey: content})
-    } catch (error) {
-        response.status(500).send({ message: error.message })
+app.get('/', async (request, response) => { //get request
+    try {   //try to get data
+        const content = await TestModel.find()  //get data
+        console.log(content);   //log data
+        response.render('index.ejs',{contentKey: content})  //render index.ejs
+    } catch (error) {   //if error
+        response.status(500).send({ message: error.message })   //send error
     }
 })
 
